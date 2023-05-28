@@ -41,7 +41,7 @@ public class ReviewController {
 	}
 
 	@GetMapping("/secure/user/book")
-	public Boolean reviewBOokByUser(@RequestParam("bookId") Long bookId) throws Exception {
+	public Boolean reviewBookByUser(@RequestParam("bookId") Long bookId) throws Exception {
 		return reviewService.userReviewListed(userService.fetchOne(utilityService.getLoggedInUserId()).getEmail(), bookId);
 	}
 }
