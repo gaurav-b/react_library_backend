@@ -1,5 +1,7 @@
 package com.luv2code.springbootlibrary.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.luv2code.springbootlibrary.dto.ShelfCurrentLoansDTO;
 import com.luv2code.springbootlibrary.entity.Book;
 import com.luv2code.springbootlibrary.entity.User;
 import com.luv2code.springbootlibrary.service.BookService;
@@ -69,5 +72,23 @@ public class BookController {
 	public Boolean chckckoutBookByUser(@RequestParam Long bookId) {
 		User loggedInUser = userService.fetchOne(utilityService.getLoggedInUserId()); 
 		return bookService.checkoutBookByUser(loggedInUser.getEmail(), bookId);
+	}
+	
+	@GetMapping(path = "/secure/currentloans")
+	public List<ShelfCurrentLoansDTO> currentLoans() throws Exception {
+		User loggedInUser = userService.fetchOne(utilityService.getLoggedInUserId()); 
+		return bookService.currentLoans(loggedInUser.getEmail());
+	}
+	
+	@PutMapping(path = "/secure/return")
+	public void returnBook(@RequestParam Long bookId) throws Exception {
+		User loggedInUser = userService.fetchOne(utilityService.getLoggedInUserId()); 
+		bookService.returnBook(loggedInUser.getEmail(), bookId);
+	}
+	
+	@PutMapping(path = "/secure/renew/loan")
+	public void renewLoan(@RequestParam Long bookId) throws Exception {
+		User loggedInUser = userService.fetchOne(utilityService.getLoggedInUserId()); 
+		bookService.renewLoan(loggedInUser.getEmail(), bookId);
 	}
 }
